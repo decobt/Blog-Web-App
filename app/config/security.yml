@@ -1,0 +1,44 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+
+    providers:
+        db_provider:
+            entity:
+                class: AppBundle:User
+                property: username
+                
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]    
+        
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main: 
+            anonymous: ~
+ 
+            provider: db_provider
+            
+            form_login:
+                login_path:  /login
+                check_path:  /login
+                default_target_path: /dashboard    
+                csrf_token_generator: security.csrf.token_manager
+                
+            logout:
+                path: /logout
+                target: /
+                invalidate_session: true
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }  
+        - { path: ^/dashboard/^, roles: ROLE_USER }
+                
+    
