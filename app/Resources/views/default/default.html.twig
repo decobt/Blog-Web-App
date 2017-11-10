@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        
+        <style>
+            body{background:#18bc9c; color:white}
+            .navbar{
+                background: #2c3e50;
+                border-color: #2c3e50;
+                border-radius: 0;
+                padding: 10px 0px;
+                color:white;
+            }
+            label{color:#222}
+            .navbar-brand,.navbar-text{color:white !important}
+        </style>
+    </head>
+    <body>
+        
+        <nav class="navbar navbar-default">
+          <div class="container">
+              
+            <div class="navbar-header">
+              <a class="navbar-brand" href="{{ path('homepage') }}">HomePage</a>
+            </div>
+              
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+             
+            <div class="pull-right">              
+                
+                {% if not(is_granted('ROLE_ADMIN') or is_granted('ROLE_USER'))  %}
+                <a href="{{ path('login') }}" class="btn btn-default navbar-btn">Sign in</a>
+                {% endif %}
+                
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                <a href="{{ path('logout') }}" class="btn btn-default navbar-btn">Log Out</a>
+                
+                <p class="navbar-text">Signed in as <strong>{{ app.user.username }}</strong></p>
+                {% endif %}
+            </div>
+          </div>
+        </nav>
+        
+        <div class="container">
+        {% block body %}
+        
+        {% endblock %}
+        </div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

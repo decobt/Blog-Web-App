@@ -1,0 +1,44 @@
+{# app/Resources/views/auth/register.html.twig #}
+
+{% extends 'default/default.html.twig' %}
+
+{% block body %}
+<div class="col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
+    
+        <h2>Create Account</h2>
+        
+        <div class="panel panel-primary" style="border:#2c3e50">
+            <div class="panel-heading" style="background: #2c3e50"><h4>Register Form</h4></div>
+            <div class="panel-body">
+                {{ form_start(form) }}
+                    {{ form_errors(form) }}
+
+                    <div class="form-group">
+                    {{ form_label(form.username) }}
+                    {{ form_errors(form.username) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control input-lg'}}) }}
+                    </div>
+
+                    <div class="form-group">
+                    {{ form_errors(form.password) }}
+                    {{ form_row(form.password.first, {'attr': {'class': 'form-control input-lg'}}) }}
+                    {{ form_row(form.password.second, {'attr': {'class': 'form-control input-lg'}}) }}
+                    </div>
+
+
+                    <div class="form-group">
+                    {{ form_label(form.email) }}
+                    {{ form_errors(form.email) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control input-lg'}}) }}
+                    </div>
+
+                    <div>
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-default btn-lg'}}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="panel-footer text-center" style="background: #2c3e50;"><h4>Already have account? <a href="{{ path('login') }}">Sign In</a></h4></div>
+    </div>
+</div>
+
+{% endblock %}

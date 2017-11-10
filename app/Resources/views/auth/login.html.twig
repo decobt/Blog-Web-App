@@ -1,0 +1,39 @@
+{# app/Resources/views/auth/login.html.twig #}
+
+{% extends 'default/default.html.twig' %}
+
+{% block body %}
+<div class="col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
+    
+        <h2>Login to your account</h2>
+        
+        {% if error %}
+            <div class="alert alert-success" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <div class="panel panel-primary" style="border:#2c3e50">
+            <div class="panel-heading" style="background: #2c3e50"><h4>Sign In</h4></div>
+            <div class="panel-body">
+                <form action="{{ path('login') }}" method="post">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="_username" class="form-control input-lg" />
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="_password"  class="form-control input-lg" />
+                  </div>
+                  <div class="form-group">
+                    <input type="hidden" name="_csrf_token"
+                        value="{{ csrf_token('authenticate') }}"
+                    >
+                  </div>
+
+                  <button type="submit" class="btn btn-default btn-lg">Login</button>
+                </form>
+            </div>
+            <div class="panel-footer text-center" style="background: #2c3e50;"><h4>New here? <a href="{{ path('register') }}">Join Us</a></h4></div>
+        </div>
+</div>
+
+{% endblock %}
