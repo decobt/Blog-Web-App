@@ -39,17 +39,12 @@ class User implements UserInterface
      */
     private $role;
     
-    /**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive;
-
     public function __construct()
     {
-        $this->isActive = true;
+        $this->role = 'ROLE_USER';
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
-        $this->role = 'ROLE_USER';
+        
     }
 
     public function getUsername()
@@ -130,24 +125,4 @@ class User implements UserInterface
         return $this->email;
     }
 
-    /**
-     * Set isActive
-     * @param boolean $isActive
-     * @return User
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     * @return boolean
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
 }

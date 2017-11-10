@@ -34,18 +34,10 @@ class SecurityController extends Controller
         
         $error = $authUtils->getLastAuthenticationError();
         
-            return $this->render('base.html.twig', array(
+            return $this->render('auth/login.html.twig', array(
                 'form' => $form->createView(),
                 'error' => $error,
                 ));
-    }
-    
-    /**
-     * @Route("/login_check", name="loginCheck")
-     */
-    public function loginCheckAction(Request $request)
-    {        
-
     }
     
     /**
@@ -91,12 +83,15 @@ class SecurityController extends Controller
             $em->persist($user);
             $em->flush();
             
-            return new Response('user created');
+            $this->addFlash(
+                'notice',
+                'Succesfully created a new profile!'
+            );
+            return $this->render('homepage');
         }
         
-            return $this->render('base.html.twig', array(
-                'form' => $form->createView(),
-                'error'=> ''
+            return $this->render('auth/register.html.twig', array(
+                'form' => $form->createView()
                 ));
     }
 }

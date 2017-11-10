@@ -15,7 +15,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
-        return new Response('Home Page');
+        return $this->render('default/default.html.twig');
     }
     /**
      * @Route("/dashboard", name="dashboard")
@@ -23,7 +23,7 @@ class DefaultController extends Controller
     public function dashboardAction(Request $request)
     {
         // replace this example code with whatever you need
-        return new Response('Dashboard Page');
+        return $this->render('default/default.html.twig');
     }
     /**
      * @Route("/admin", name="admin")
@@ -31,6 +31,6 @@ class DefaultController extends Controller
     public function adminAction(Request $request)
     {
         // replace this example code with whatever you need
-        return new Response('Admin Page');
+        return $this->render('default/default.html.twig');
     }
 }
