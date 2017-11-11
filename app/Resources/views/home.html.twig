@@ -1,0 +1,41 @@
+{# app/Resources/views/home.html.twig #}
+
+{% extends 'default/default.html.twig' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-sm-10 col-sm-push-1">
+      
+    <div style="margin-bottom:20px">    
+    <form class="form-inline">
+        <div class="input-group" style="width:100%">
+            <input type="text" class="form-control input-lg" placeholder="Search for...">
+            <span class="input-group-btn" style="width: 150px">
+                <button class="btn btn-danger btn-lg" type="button" style="width:100%">Search</button>
+            </span>
+        </div>
+    </form>
+    </div>
+        
+    {% for post in posts%}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>{{ post.title }}</h3>
+            </div>
+            <div class="panel-body" style="color:#222">
+              
+              <p>{{ post.summary }}</p>
+              <a href="#" class="btn btn-primary">Read More &rarr;</a>
+            </div>
+            <div class="panel-footer text-muted">
+              Posted on January 1, 2017
+            </div>
+          </div>
+
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
