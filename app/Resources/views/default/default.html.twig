@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -48,7 +48,7 @@
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
                 <a href="{{ path('logout') }}" class="btn btn-default navbar-btn">Log Out</a>
                 
-                <p class="navbar-text">Signed in as <strong>{{ app.user.username }}</strong></p>
+                <p class="navbar-text">Signed in as <a href="{{ path('dashboard') }}"><strong>{{ app.user.username }}</strong></a></p>
                 {% endif %}
             </div>
           </div>
