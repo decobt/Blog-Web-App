@@ -51,7 +51,7 @@ class PostController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             
             //get the author id
-            $author_id = $user = $this->get('security.token_storage')->getToken()->getUser()->getId();
+            $author_id = $this->get('security.token_storage')->getToken()->getUser()->getId();
 
             //look for the author in the db based on his id
             $rep = $this->getDoctrine()->getRepository('AppBundle:User');

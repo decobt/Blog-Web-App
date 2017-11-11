@@ -14,16 +14,35 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/default.html.twig');
+        // set repository
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
+        
+        $posts = $rep ->findAll();
+        
+        return $this->render('home.html.twig', array(
+            'posts'=>$posts
+        ));
     }
     /**
      * @Route("/dashboard", name="dashboard")
      */
     public function dashboardAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/default.html.twig');
+        // set repository
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
+        
+        // get logged user's id
+        $author = $this->get('security.token_storage')->getToken()->getUser()->getId();
+        
+        // search all posts based on author
+        $posts = $rep ->findBy(
+            array('author'=>$author)
+        );
+        
+        // render the dashboard with all the posts
+        return $this->render('dashboard.html.twig', array(
+            'posts'=>$posts
+        ));
     }
     /**
      * @Route("/admin", name="admin")
