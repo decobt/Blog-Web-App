@@ -15,21 +15,39 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class PostController extends Controller
 {
     /**
-     * @Route("/blog")
+     * @Route("/posts", name="blog")
      */
     public function blogAction(Request $request)
     {
+        // set repository
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
+        
+        // get logged user's id
+        $author = $this->get('security.token_storage')->getToken()->getUser()->getId();
+        
+        // search all posts based on author
+        $posts = $rep ->findBy(
+            array('author'=>$author)
+        );
+        
         // replace this example code with whatever you need
-        return $this->render('default/default.html.twig');
+        return $this->render('home.html.twig', array(
+            'posts'=>$posts
+        ));
     }
     
     /**
-     * @Route("/post/{id}", requirements={"id":"\d+"})
+     * @Route("/post/{id}", name="view_post", requirements={"id":"\d+"})
      */
     public function postAction(Request $request, $id)
     {
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $post = $rep->find($id);
+        
         // replace this example code with whatever you need
-        return $this->render('default/default.html.twig');
+        return $this->render('page.html.twig', array(
+            'post'=>$post
+        ));
     }
     
     /**
@@ -65,10 +83,10 @@ class PostController extends Controller
             $em->flush();
             
             $this->addFlash(
-                'notice',
+                'success',
                 'Succesfully added a new post'
             );
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('dashboard');
         }
         
         return $this->render('post.html.twig', array(
@@ -82,8 +100,36 @@ class PostController extends Controller
      */
     public function editPostAction(Request $request, $id)
     {
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $post = $rep->find($id);
+                
+        $form = $this->createFormBuilder($post)
+            ->add('title', TextType::class)
+            ->add('summary', TextareaType::class)
+            ->add('content', TextareaType::class)
+            ->add('tags', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Create Post'))
+            ->getForm();
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($post);
+            $em->flush();
+            
+            $this->addFlash(
+                'success',
+                'Succesfully updated the post!'
+            );
+            return $this->redirectToRoute('dashboard');
+        }
+        
         // replace this example code with whatever you need
-        return $this->render('default/default.html.twig');
+        return $this->render('post.html.twig', array(
+            'title' => 'Update the Post',
+            'form' => $form->createView()
+            ));
     }
     
     /**
@@ -91,7 +137,17 @@ class PostController extends Controller
      */
     public function deletePostAction(Request $request, $id)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/default.html.twig');
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $post = $rep->find($id);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
+            
+        $this->addFlash(
+                'info',
+                'Succesfully removed the post!'
+            );
+        return $this->redirectToRoute('dashboard');
     }
 }

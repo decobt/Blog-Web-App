@@ -41,13 +41,23 @@ class DefaultController extends Controller
         
         // render the dashboard with all the posts
         return $this->render('dashboard.html.twig', array(
-            'posts'=>$posts
+            'posts'=>$posts,
+            'comments'=> ''
         ));
     }
     /**
      * @Route("/admin", name="admin")
      */
     public function adminAction(Request $request)
+    {
+        // replace this example code with whatever you need
+        return $this->render('default/default.html.twig');
+    }
+    
+    /**
+     * @Route("/profile/{id}", name="profile", requirements={"id":"\d+"})
+     */
+    public function profileAction(Request $request)
     {
         // replace this example code with whatever you need
         return $this->render('default/default.html.twig');
