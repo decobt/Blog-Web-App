@@ -7,6 +7,15 @@
 <div class="row">
 <div class="col-sm-10 col-sm-push-1">
     
+    {% for label, messages in app.flashes() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismislable" role="alert">
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    
     <div class="panel panel-primary">
         <div class="panel-heading clearfix">
             <h4>Your Profile</h4>
@@ -15,7 +24,7 @@
             some table here
         </div>
         <div class="panel-footer text-muted">
-            <a href="{{ path('create_post') }}" class="btn btn-primary">Preview</a>
+            <a href="{{ path('profile', {'id': app.user.id }) }}" class="btn btn-primary">Preview</a>
         </div>
     </div>
     
@@ -58,40 +67,26 @@
             <button type="button" class="close" data-target="#panel-default" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="panel-body" style="color:#222">
-            some table here
+            
+            {% include 'dashboard/posts.html.twig' with {'posts': posts} %}
+
         </div>
         <div class="panel-footer text-muted">
             <a href="{{ path('create_post') }}" class="btn btn-success">Create New</a>
-            <a href="{{ path('create_post') }}" class="btn btn-warning pull-right">View All</a>
+            <a href="{{ path('blog') }}" class="btn btn-warning pull-right">View All</a>
         </div>
     </div>
 
-    <div class="panel panel-warning" id="panel-warning">
+    <div class="panel panel-danger" id="panel-warning">
         <div class="panel-heading">
             Your Latest Comments
             <button type="button" class="close" data-target="#panel-warning" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="panel-body" style="color:#222">
-            some table here
-        </div>
-        <div class="panel-footer text-muted">
-             some code here
-        </div>
-    </div>
-
-    <div class="panel panel-danger" id="panel-danger">
-        <div class="panel-heading">
-            Newest Members
-            <button type="button" class="close" data-target="#panel-danger" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="panel-body" style="color:#222">
-            some table here
-        </div>
-        <div class="panel-footer text-muted">
-             some code here
+            {% include 'dashboard/comments.html.twig' with {'comments': comments} %}
         </div>
     </div>
     
-</div>
+    </div>
 </div>
 {% endblock %}

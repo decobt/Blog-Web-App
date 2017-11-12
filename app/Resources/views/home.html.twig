@@ -27,7 +27,7 @@
             <div class="panel-body" style="color:#222">
               
               <p>{{ post.summary }}</p>
-              <a href="#" class="btn btn-primary">Read More &rarr;</a>
+              <a href="{{ path('view_post', {'id': post.id} )}}" class="btn btn-primary">Read More &rarr;</a>
             </div>
             <div class="panel-footer text-muted">
               Posted on January 1, 2017
