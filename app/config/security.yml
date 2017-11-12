@@ -40,5 +40,10 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }  
         - { path: ^/dashboard, roles: ROLE_USER }
+        - { path: ^/posts, roles: ROLE_USER }
+        - { path: ^/post/[0-9]$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/post, roles: ROLE_USER }
+        
+
                 
     
