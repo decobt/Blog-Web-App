@@ -30,7 +30,7 @@
               <a href="{{ path('view_post', {'id': post.id} )}}" class="btn btn-primary">Read More &rarr;</a>
             </div>
             <div class="panel-footer text-muted">
-              Posted on January 1, 2017
+              By: <a href="{{ path('profile', {'id': post.author.id }) }}"> {{ post.author.username }}</a> on {{post.date|date('Y-m-d') }}
             </div>
           </div>
 
