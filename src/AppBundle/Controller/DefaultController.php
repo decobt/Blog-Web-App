@@ -39,10 +39,14 @@ class DefaultController extends Controller
             array('author'=>$author)
         );
         
+        $comments = $this->getDoctrine()->getRepository('AppBundle:Comment')->findBy(
+            array('author'=>$author)
+        );
+        
         // render the dashboard with all the posts
         return $this->render('dashboard.html.twig', array(
             'posts'=>$posts,
-            'comments'=> ''
+            'comments'=> $comments
         ));
     }
     /**

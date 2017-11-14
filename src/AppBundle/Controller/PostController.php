@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Post;
+use AppBundle\Entity\Comment;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -41,12 +42,37 @@ class PostController extends Controller
      */
     public function postAction(Request $request, $id)
     {
-        $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $post = $rep->find($id);
+        $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
+        $comments = $this->getDoctrine()->getRepository('AppBundle:Comment')->findByAuthor($post);
         
+        $comment = new Comment();
+
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $author_user = $this->get('security.token_storage')->getToken()->getUser();
+            $comment->setAuthor($author_user);
+        }
+        
+        $comment->setPost($post);
+        $comment->setDate(new \DateTime('now'));
+        
+        $form = $this->createFormBuilder($comment)
+            ->add('comment', TextareaType::class)
+            ->add('save', SubmitType::class, array('label' => 'Add Comment'))
+            ->getForm();
+        
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+            
+        }
         // replace this example code with whatever you need
         return $this->render('page.html.twig', array(
-            'post'=>$post
+            'post'=>$post,
+            'comments'=>$comments,
+            'form'=>$form->createView()
         ));
     }
     
@@ -56,6 +82,7 @@ class PostController extends Controller
     public function createPostAction(Request $request)
     {
         $post = new Post();
+        $post->setDate(new \DateTime('now'));
         
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
@@ -108,7 +135,7 @@ class PostController extends Controller
             ->add('summary', TextareaType::class)
             ->add('content', TextareaType::class)
             ->add('tags', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'Create Post'))
+            ->add('save', SubmitType::class, array('label' => 'Update Post'))
             ->getForm();
         $form->handleRequest($request);
         
