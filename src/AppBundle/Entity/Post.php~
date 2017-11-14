@@ -45,6 +45,11 @@ class Post{
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
 
     /**
      * Get id
@@ -150,5 +155,29 @@ class Post{
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Post
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }
