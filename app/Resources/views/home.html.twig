@@ -7,17 +7,20 @@
 <div class="row">
     <div class="col-sm-10 col-sm-push-1">
       
-    <div style="margin-bottom:20px">    
-    <form class="form-inline">
-        <div class="input-group" style="width:100%">
-            <input type="text" class="form-control input-lg" placeholder="Search for...">
-            <span class="input-group-btn" style="width: 150px">
-                <button class="btn btn-danger btn-lg" type="button" style="width:100%">Search</button>
-            </span>
+    {% if search is defined %}
+        <div style="margin-bottom:20px">    
+        <form class="form-inline" method="post" action="{{ path('search') }}">
+            <div class="input-group" style="width:100%">
+                <input type="text" name="search" class="form-control input-lg" placeholder="Search for...">
+                <span class="input-group-btn" style="width: 150px">
+                    <button type="submit" class="btn btn-danger btn-lg" style="width:100%">Search</button>
+                </span>
+            </div>
+        </form>
         </div>
-    </form>
-    </div>
+    {% endif %}
         
+    {% if posts is not empty %}
     {% for post in posts%}
 
         <div class="panel panel-default">
@@ -35,6 +38,15 @@
           </div>
 
     {% endfor %}
+    {% else %}
+        <div style="padding:60px 0px">
+        <div class="text-center">
+            <h2>No posts have been found! </h2>
+            <a href="{{ path( 'homepage' )}}" class="btn btn-default">Back to Homepage</a>
+        </div>
+        </div>
+    {% endif %}
+        
     </div>
 </div>
 

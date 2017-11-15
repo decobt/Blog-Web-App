@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,8 @@ class DefaultController extends Controller
         $posts = $rep ->findAll();
         
         return $this->render('home.html.twig', array(
-            'posts'=>$posts
+            'posts'=>$posts,
+            'search' => ''
         ));
     }
     /**
@@ -65,5 +67,29 @@ class DefaultController extends Controller
     {
         // replace this example code with whatever you need
         return $this->render('default/default.html.twig');
+    }
+    
+    /**
+     * @Route("/search", name="search")
+     * @Method("POST")
+     */
+    public function searchAction(Request $request)
+    {
+        $search_term = $request->get('search');
+        
+        $em = $this->getDoctrine()->getManager();
+        $result = $em->getRepository("AppBundle:Post")->createQueryBuilder('p')
+               ->where('p.content LIKE :term')
+               ->orwhere('p.summary LIKE :term')
+               ->orwhere('p.title LIKE :term')
+               ->setParameter('term', '%' . $search_term . '%')
+               ->getQuery()
+               ->getResult();
+        
+        // replace this example code with whatever you need
+        return $this->render('home.html.twig', array(
+            'posts'=>$result,
+            'search' => ''
+        ));
     }
 }
