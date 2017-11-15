@@ -4,6 +4,7 @@
                         <tr>
                             <th>#</th>
                             <th>Comment</th>
+                            <th>Published on post</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -14,6 +15,7 @@
                         <tr>
                             <td><h5><strong>{{ foo }}</strong></h5></td>
                             <td><h5>{{ post.comment }}</h5></td>
+                            <td><a href="{{ path('view_post',{'id':post.post.id}) }}"><h5>{{ post.post.title }}</h5></a></td>
                             <td class="text-right">
                                 <a href="{{ path('delete_comment', {'id': post.id}) }}" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </td>
