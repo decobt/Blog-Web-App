@@ -43,7 +43,9 @@ class PostController extends Controller
     public function postAction(Request $request, $id)
     {
         $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
-        $comments = $this->getDoctrine()->getRepository('AppBundle:Comment')->findByAuthor($post);
+        $comments = $this->getDoctrine()->getRepository('AppBundle:Comment')->findBy(array(
+            'post'=>$post
+        ));
         
         $comment = new Comment();
 
@@ -174,6 +176,25 @@ class PostController extends Controller
         $this->addFlash(
                 'info',
                 'Succesfully removed the post!'
+            );
+        return $this->redirectToRoute('dashboard');
+    }
+    
+    /**
+     * @Route("/comment/{id}/delete", name="delete_comment", requirements={"id":"\d+"})
+     */
+    public function deleteCommentAction(Request $request, $id)
+    {
+        $rep = $this->getDoctrine()->getRepository('AppBundle:Comment');
+        $comment = $rep->find($id);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($comment);
+        $em->flush();
+            
+        $this->addFlash(
+                'info',
+                'Succesfully removed the comment!'
             );
         return $this->redirectToRoute('dashboard');
     }

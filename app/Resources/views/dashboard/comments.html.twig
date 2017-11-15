@@ -15,7 +15,7 @@
                             <td><h5><strong>{{ foo }}</strong></h5></td>
                             <td><h5>{{ post.comment }}</h5></td>
                             <td class="text-right">
-                                <a href="{{ path('delete_post', {'id': post.id}) }}" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                                <a href="{{ path('delete_comment', {'id': post.id}) }}" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                             </td>
                         </tr>
                         {% set foo = foo + 1 %}
