@@ -23,7 +23,8 @@ class SecurityController extends Controller
     public function loginAction(Request $request, AuthenticationUtils $authUtils)
     {
         $user = new User();
-
+        
+        // create the login form
         $form = $this->createFormBuilder($user)
             ->setAction($this->generateUrl('login'))
             ->setMethod('POST')
@@ -55,6 +56,7 @@ class SecurityController extends Controller
     {        
         $user = new User();
 
+        // create the register form
         $form = $this->createFormBuilder($user)
             ->add('username', TextType::class)
             ->add('password', RepeatedType::class, array(
@@ -77,20 +79,25 @@ class SecurityController extends Controller
             $encoder = $this->get('security.encoder_factory')->getEncoder($user);
             $password = $encoder->encodePassword($user->getPassword(), $user->getSalt());
 
+            // set the password
             $user->setPassword($password);
             
+            // save the new user
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
             
+            // add a flash message for success
             $this->addFlash(
                 'notice',
                 'Succesfully created a new profile!'
             );
+            //render homepage
             return $this->render('homepage');
         }
         
-            return $this->render('auth/register.html.twig', array(
+        // render the registration form
+        return $this->render('auth/register.html.twig', array(
                 'form' => $form->createView()
                 ));
     }

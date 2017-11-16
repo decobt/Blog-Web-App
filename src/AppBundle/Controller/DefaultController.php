@@ -18,13 +18,16 @@ class DefaultController extends Controller
         // set repository
         $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
         
+        // get all posts
         $posts = $rep ->findAll();
         
+        //render the view
         return $this->render('home.html.twig', array(
             'posts'=>$posts,
             'search' => ''
         ));
     }
+    
     /**
      * @Route("/dashboard", name="dashboard")
      */
@@ -41,22 +44,26 @@ class DefaultController extends Controller
             array('author'=>$author)
         );
         
+        //get all comments based on author
         $comments = $this->getDoctrine()->getRepository('AppBundle:Comment')->findBy(
             array('author'=>$author)
         );
         
-        // render the dashboard with all the posts
+        // render the dashboard with all the posts and comments
         return $this->render('dashboard.html.twig', array(
             'posts'=>$posts,
             'comments'=> $comments
         ));
     }
+    
     /**
      * @Route("/admin", name="admin")
      */
     public function adminAction(Request $request)
     {
-        // replace this example code with whatever you need
+        // replace this code with whatever you need
+        // to be expanded later
+        
         return $this->render('default/default.html.twig');
     }
     
@@ -75,8 +82,10 @@ class DefaultController extends Controller
      */
     public function searchAction(Request $request)
     {
+        //get the data for search
         $search_term = $request->get('search');
         
+        //create the query and get the result
         $em = $this->getDoctrine()->getManager();
         $result = $em->getRepository("AppBundle:Post")->createQueryBuilder('p')
                ->where('p.content LIKE :term')
@@ -86,7 +95,7 @@ class DefaultController extends Controller
                ->getQuery()
                ->getResult();
         
-        // replace this example code with whatever you need
+        // render the view with the new data
         return $this->render('home.html.twig', array(
             'posts'=>$result,
             'search' => ''
