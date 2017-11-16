@@ -16,12 +16,15 @@
         {% endfor %}
     {% endfor %}
     
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
         <div class="panel-heading clearfix">
             <h4>Your Profile</h4>
         </div>
         <div class="panel-body" style="color:#222">
-            some table here
+            {% if app.user %}
+            <p>Username: {{ app.user.username }}</p>
+            <p>Email: {{ app.user.email }}</p>
+            {% endif %}
         </div>
         <div class="panel-footer text-muted">
             <a href="{{ path('profile', {'id': app.user.id }) }}" class="btn btn-primary">Preview</a>
@@ -79,7 +82,7 @@
         </div>
     </div>
 
-    <div class="panel panel-danger" id="panel-warning">
+    <div class="panel panel-default" id="panel-warning">
         <div class="panel-heading">
             Your Latest Comments
             <button type="button" class="close" data-target="#panel-warning" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>

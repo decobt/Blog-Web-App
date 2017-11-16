@@ -11,19 +11,21 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         
         <style>
-            body{background:#18bc9c; color:white}
+            body{background:#222; color:white;}
             .navbar{
-                background: #2c3e50;
-                border-color: #2c3e50;
+                background: #e74c3c;
+                border-color: #e74c3c;
                 border-radius: 0;
                 padding: 10px 0px;
                 color:white;
             }
             label{color:#222}
+            .footer{padding:20px;background:#e74c3c}
             .navbar-brand,.navbar-text{color:white !important}
         </style>
     </head>
     <body>
+        
         
         <nav class="navbar navbar-default">
           <div class="container">
@@ -32,30 +34,40 @@
               <a class="navbar-brand" href="{{ path('homepage') }}">HomePage</a>
             </div>
               
-             
-            <div class="pull-right">              
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ path('dashboard') }}" style="color:white">Dashboard</a></li> 
+                    <li><a href="{{ path('create_post') }}" style="color:white">Create</a></li>
+                </ul>
+                {% endif %}
+                
+                <div class="pull-right">              
                 {% if not(is_granted('ROLE_ADMIN') or is_granted('ROLE_USER'))  %}
-                <a href="{{ path('login') }}" class="btn btn-default navbar-btn">Sign in</a>
+                    <a href="{{ path('login') }}" class="btn btn-default navbar-btn">Sign in</a>
                 {% endif %}
                 
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-                <a href="{{ path('logout') }}" class="btn btn-default navbar-btn">Log Out</a>
+                    <a href="{{ path('logout') }}" class="btn btn-default navbar-btn">Log Out</a>
                 
-                <p class="navbar-text">Signed in as <a href="{{ path('dashboard') }}"><strong>{{ app.user.username }}</strong></a></p>
+                    <p class="navbar-text">Signed in as <a href="{{ path('dashboard') }}"><strong>{{ app.user.username }}</strong></a></p>
                 {% endif %}
+                </div>
             </div>
+             
+            
           </div>
         </nav>
         
-        <div class="container">
+        <div class="container" style="min-height: 600px">
         {% block body %}
         
         {% endblock %}
         </div>
         
         <footer>
-            <div style="padding:20px; background:#2c3e50" class="text-center">CopyRight, 2017, Trayche Roshkoski</div>
+            <div class="text-center footer">CopyRight, 2017, Trayche Roshkoski</div>
         </footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

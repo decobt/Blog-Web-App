@@ -11,8 +11,8 @@
             <div class="alert alert-success" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
-        <div class="panel panel-primary" style="border:#2c3e50">
-            <div class="panel-heading" style="background: #2c3e50"><h4>Sign In</h4></div>
+        <div class="panel panel-primary" style="border:#e74c3c">
+            <div class="panel-heading" style="background: #e74c3c"><h4>Sign In</h4></div>
             <div class="panel-body">
                 <form action="{{ path('login') }}" method="post">
                   <div class="form-group">
@@ -32,7 +32,7 @@
                   <button type="submit" class="btn btn-default btn-lg">Login</button>
                 </form>
             </div>
-            <div class="panel-footer text-center" style="background: #2c3e50;"><h4>New here? <a href="{{ path('register') }}">Join Us</a></h4></div>
+            <div class="panel-footer text-center" style="background: #e74c3c"><h4>New here? <a href="{{ path('register') }}">Join Us</a></h4></div>
         </div>
 </div>
 
