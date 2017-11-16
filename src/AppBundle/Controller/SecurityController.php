@@ -89,11 +89,12 @@ class SecurityController extends Controller
             
             // add a flash message for success
             $this->addFlash(
-                'notice',
+                'success',
                 'Succesfully created a new profile!'
             );
-            //render homepage
-            return $this->render('homepage');
+            
+            //redirect to homepage
+            return $this->redirectToRoute('homepage');
         }
         
         // render the registration form
