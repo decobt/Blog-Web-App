@@ -11,6 +11,7 @@ use AppBundle\Entity\Comment;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class PostController extends Controller
@@ -20,7 +21,7 @@ class PostController extends Controller
      */
     public function blogAction(Request $request)
     {
-        // set repository
+        // get repository
         $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
         
         // get logged user's id
@@ -31,7 +32,7 @@ class PostController extends Controller
             array('author'=>$author)
         );
         
-        // replace this example code with whatever you need
+        // render view
         return $this->render('home.html.twig', array(
             'posts'=>$posts
         ));
@@ -42,26 +43,32 @@ class PostController extends Controller
      */
     public function postAction(Request $request, $id)
     {
+        //find all comments for the post
         $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find($id);
         $comments = $this->getDoctrine()->getRepository('AppBundle:Comment')->findBy(array(
             'post'=>$post
         ));
         
+        //create a new comment object
         $comment = new Comment();
-
+        
+        //check if user is authenticated fully, set the author to be that user
         if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $author_user = $this->get('security.token_storage')->getToken()->getUser();
             $comment->setAuthor($author_user);
         }
         
+        //set the post parent to the comment and the date
         $comment->setPost($post);
         $comment->setDate(new \DateTime('now'));
         
+        //create the form
         $form = $this->createFormBuilder($comment)
             ->add('comment', TextareaType::class)
             ->add('save', SubmitType::class, array('label' => 'Add Comment'))
             ->getForm();
         
+        //process the form
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             
@@ -70,7 +77,8 @@ class PostController extends Controller
             $em->flush();
             
         }
-        // replace this example code with whatever you need
+        
+        //render the view
         return $this->render('page.html.twig', array(
             'post'=>$post,
             'comments'=>$comments,
@@ -86,15 +94,19 @@ class PostController extends Controller
         $post = new Post();
         $post->setDate(new \DateTime('now'));
         
+        //create the form
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
             ->add('summary', TextareaType::class)
             ->add('content', TextareaType::class)
+            ->add('image', FileType::class, array('label' => 'Post Image(jpeg)'))
             ->add('tags', TextType::class)
             ->add('save', SubmitType::class, array('label' => 'Create Post'))
             ->getForm();
+        
         $form->handleRequest($request);
                 
+        //process the form submission
         if ($form->isSubmitted() && $form->isValid()) {
             
             //get the author id
@@ -107,17 +119,37 @@ class PostController extends Controller
             //set the author
             $post->setAuthor($author);
             
+            // $file stores the uploaded file
+            $file = $post->getImage();
+            
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            $file->move(
+                $this->getParameter('post_directory'),
+                $fileName
+            );
+
+            // Update the 'brochure' property to store the file name
+            // instead of its contents
+            $post->setImage($fileName);
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
             
+            // add a flash message of success
             $this->addFlash(
                 'success',
                 'Succesfully added a new post'
             );
+            
+            //redirect to the dashboard
             return $this->redirectToRoute('dashboard');
         }
         
+        //render the view
         return $this->render('post.html.twig', array(
             'title' => 'Create a new Post',
             'form' => $form->createView()
@@ -129,9 +161,11 @@ class PostController extends Controller
      */
     public function editPostAction(Request $request, $id)
     {
+        //look for the post in DB
         $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $rep->find($id);
                 
+        //create the form with the data from the db
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
             ->add('summary', TextareaType::class)
@@ -141,20 +175,23 @@ class PostController extends Controller
             ->getForm();
         $form->handleRequest($request);
         
+        //process the form submission
         if ($form->isSubmitted() && $form->isValid()) {
             
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
             
+            //add a flash message of success
             $this->addFlash(
                 'success',
                 'Succesfully updated the post!'
             );
+            //redirect to dashboard
             return $this->redirectToRoute('dashboard');
         }
         
-        // replace this example code with whatever you need
+        // render the view
         return $this->render('post.html.twig', array(
             'title' => 'Update the Post',
             'form' => $form->createView()
@@ -166,13 +203,16 @@ class PostController extends Controller
      */
     public function deletePostAction(Request $request, $id)
     {
+        //search for the post in the db
         $rep = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $rep->find($id);
         
+        //remove the post from the db
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);
         $em->flush();
             
+        // add a flash message of success
         $this->addFlash(
                 'info',
                 'Succesfully removed the post!'
@@ -185,13 +225,16 @@ class PostController extends Controller
      */
     public function deleteCommentAction(Request $request, $id)
     {
+        //search for the comment in the db
         $rep = $this->getDoctrine()->getRepository('AppBundle:Comment');
         $comment = $rep->find($id);
         
+        //remove the comment
         $em = $this->getDoctrine()->getManager();
         $em->remove($comment);
         $em->flush();
             
+        //add a flash message of success
         $this->addFlash(
                 'info',
                 'Succesfully removed the comment!'
