@@ -7,9 +7,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        
+
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        
+
         <style>
             body{background:#222; color:white;}
             .navbar{
@@ -20,54 +20,60 @@
                 color:white;
             }
             label{color:#222}
-            .footer{padding:20px;background:#e74c3c}
+            .footer{padding:20px;background:#c0392b}
             .navbar-brand,.navbar-text{color:white !important}
         </style>
     </head>
     <body>
-        
-        
+
+
         <nav class="navbar navbar-default">
           <div class="container">
-              
+
             <div class="navbar-header">
               <a class="navbar-brand" href="{{ path('homepage') }}">HomePage</a>
             </div>
-              
+
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                
+
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ path('dashboard') }}" style="color:white">Dashboard</a></li> 
+                    <li><a href="{{ path('dashboard') }}" style="color:white">Dashboard</a></li>
                     <li><a href="{{ path('create_post') }}" style="color:white">Create</a></li>
                 </ul>
                 {% endif %}
-                
-                <div class="pull-right">              
+
+                <div class="pull-right">
                 {% if not(is_granted('ROLE_ADMIN') or is_granted('ROLE_USER'))  %}
                     <a href="{{ path('login') }}" class="btn btn-default navbar-btn">Sign in</a>
                 {% endif %}
-                
+
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
                     <a href="{{ path('logout') }}" class="btn btn-default navbar-btn">Log Out</a>
-                
+
                     <p class="navbar-text">Signed in as <a href="{{ path('dashboard') }}"><strong>{{ app.user.username }}</strong></a></p>
                 {% endif %}
                 </div>
             </div>
-             
-            
+
+
           </div>
         </nav>
-        
+
         <div class="container" style="min-height: 600px">
         {% block body %}
-        
+
         {% endblock %}
         </div>
-        
+
+        <div class="" style="background:#e74c3c; padding:40px 0px;">
+          <div class="container">
+            <h4>Welcome User</h4>
+            <p>This is a test application build for the sole purpose of playing around with Symfony framework and testing some code.</p>
+          </div>
+        </div>
         <footer>
-            <div class="text-center footer">CopyRight, 2017, Trayche Roshkoski</div>
+            <div class="text-center footer">Copyright, 2017, <a href="https://trajcheroshkoski.com/" target="_blank">Trayche Roshkoski</a></div>
         </footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
